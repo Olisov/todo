@@ -1,0 +1,1 @@
+export { AppMain as default } from './app-main'

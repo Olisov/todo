@@ -1,1 +1,1 @@
-import './task-filter.css'
+export { TaskFilter as default } from './task-filter'

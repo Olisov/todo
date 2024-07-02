@@ -1,1 +1,1 @@
-import './task.css'
+export { Task as default } from './task'

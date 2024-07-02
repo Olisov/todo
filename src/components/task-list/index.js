@@ -1,1 +1,1 @@
-import './task-list.css'
+export { TodoList as default } from './task-list'

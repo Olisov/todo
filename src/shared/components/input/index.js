@@ -1,0 +1,1 @@
+export {NewInput as default} from './input'
