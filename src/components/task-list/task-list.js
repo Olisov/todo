@@ -1,61 +1,34 @@
 import Task from '../task'
 import './task-list.css'
+import NewInput from '../../shared/components/input'
 
 
-export function TodoList() {
+// const todoData = [
+//   {taskText: 'Completed task', className: 'completed', createdDate: (Date.now().getSeconds() - 17), id: 1},
+//   {taskText: 'Editing task', className: 'editing', createdDate: (Date.now().getMinutes() - 5), id: 2},
+//   {taskText: 'Active task', createdDate: (Date.now().getMinutes() - 5), id: 3},
+// ]
 
+
+export function TaskList({todos}) {
+  const todoTasks = todos.map(todoTask => {
+    const {id, className, ...todoData} = todoTask
+
+    if(className === 'editing' ) {
+      return <li key={id} {...(className ? {'className': className} : {})}>
+        <Task  { ...todoData }/>
+        <NewInput inputClass="edit" value={todoData.taskText} />
+      </li>
+    }
+
+    return <li key={id} {...(className ? {'className': className} : {})}>
+      <Task  { ...todoData }/>
+    </li>
+  })
+
+  return ( 
+    <ul className='todo-list'>
+        { todoTasks }
+    </ul>
+    )
 }
-
-
-{/* <ul class="todo-list">
-  <li class="completed">
-
-  </li>
-  <li class="editing">
-
-    <input type="text" class="edit" value="Editing task">
-  </li>
-  <li>
-
-  </li>
-</ul> */}
-
-
-
-
-{/* <ul class="todo-list">
-  <li class="completed">
-    <div class="view">
-      <input class="toggle" type="checkbox">
-      <label>
-        <span class="description">Completed task</span>
-        <span class="created">created 17 seconds ago</span>
-      </label>
-      <button class="icon icon-edit"></button>
-      <button class="icon icon-destroy"></button>
-    </div>
-  </li>
-  <li class="editing">
-    <div class="view">
-      <input class="toggle" type="checkbox">
-      <label>
-        <span class="description">Editing task</span>
-        <span class="created">created 5 minutes ago</span>
-      </label>
-      <button class="icon icon-edit"></button>
-      <button class="icon icon-destroy"></button>
-    </div>
-    <input type="text" class="edit" value="Editing task">
-  </li>
-  <li>
-    <div class="view">
-      <input class="toggle" type="checkbox">
-      <label>
-        <span class="description">Active task</span>
-        <span class="created">created 5 minutes ago</span>
-      </label>
-      <button class="icon icon-edit"></button>
-      <button class="icon icon-destroy"></button>
-    </div>
-  </li>
-</ul> */}

@@ -1,41 +1,27 @@
 import { formatDistanceToNow } from 'date-fns'
 import './task.css'
+import NewInput from '../../shared/components/input'
 
-// formatDistanceToNow(new Date(2014, 6, 2), { addSuffix: true })
+// formatDistanceToNow(new Date(2014, 6, 2), { addSuffix: true, includeSeconds: true })
 //=> 'in 6 months'
 
+// const todoData = [
+//   {taskText: 'Completed task', createdDate: (Date.now().getSeconds() - 17)},
+//   {taskText: 'Editing task', createdDate: (Date.now().getMinutes() - 5)},
+//   {taskText: 'Active task', createdDate: (Date.now().getMinutes() - 5)},
+// ]
 
-export function Task() {
+export function Task({taskText, createdDate}) {
+    return <div className="view">
+        <NewInput inputClass="toggle" type="checkbox" />
+        <label>
+            <span className="description">{taskText}</span>
+            <span className="created">{
+                formatDistanceToNow(createdDate, { addSuffix: true, includeSeconds: true })
+            }</span>
+        </label>
+        <button className="icon icon-edit"></button>
+        <button className="icon icon-destroy"></button>
+    </div>
 
 }
-
-
-{/* <div class="view">
-    <input class="toggle" type="checkbox">
-    <label>
-    <span class="description">Completed task</span>
-    <span class="created">created 17 seconds ago</span>
-    </label>
-    <button class="icon icon-edit"></button>
-    <button class="icon icon-destroy"></button>
-</div>
-
-<div class="view">
-    <input class="toggle" type="checkbox">
-    <label>
-    <span class="description">Editing task</span>
-    <span class="created">created 5 minutes ago</span>
-    </label>
-    <button class="icon icon-edit"></button>
-    <button class="icon icon-destroy"></button>
-</div>
-
-<div class="view">
-    <input class="toggle" type="checkbox">
-    <label>
-    <span class="description">Active task</span>
-    <span class="created">created 5 minutes ago</span>
-    </label>
-    <button class="icon icon-edit"></button>
-    <button class="icon icon-destroy"></button>
-</div> */}

@@ -7,7 +7,7 @@ export function App() {
     return (
         <section className="todoapp">
             <AppHeader />
-            {/* <AppMain /> */}
+            <AppMain />
         </section>
     )
 }

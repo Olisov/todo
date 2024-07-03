@@ -1,3 +1,4 @@
+import './input.css'
 
 export const NewInput = ({inputClass, type, placeholder, value, autoFocus}) => {
 
@@ -7,7 +8,6 @@ export const NewInput = ({inputClass, type, placeholder, value, autoFocus}) => {
         {...(placeholder ? {'placeholder': placeholder} : {})}
         {...(value ? {'value': value} : {})}
         {...(autoFocus ? {'autoFocus': true} : {})}
-        // autoFocus
     ></input>
 }
 

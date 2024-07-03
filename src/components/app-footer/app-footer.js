@@ -2,7 +2,19 @@ import TaskFilter from '../task-filter'
 import './app-footer.css'
 
 
-export function AppFooter() {
+export function AppFooter({todos}) {
+  // const activeTasks = todos.filter(todoTask => { 
+  //   console.log(todoTask)
+  // })
+  const activeTasks = todos.forEach(todoTask => { 
+    console.log(todoTask)
+  })
+
+
+
+  return <footer className="footer">
+
+  </footer>
 
 }
 
