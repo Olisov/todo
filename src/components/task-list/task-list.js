@@ -1,6 +1,6 @@
 import Task from '../task'
 import './task-list.css'
-import NewInput from '../../shared/components/input'
+// import NewInput from '../../shared/components/input'
 
 
 // const todoData = [
@@ -10,19 +10,25 @@ import NewInput from '../../shared/components/input'
 // ]
 
 
-export function TaskList({todos}) {
+export function TaskList({todos, completeTask, editTask, deleteTask}) {
   const todoTasks = todos.map(todoTask => {
-    const {id, className, ...todoData} = todoTask
-
-    if(className === 'editing' ) {
-      return <li key={id} {...(className ? {'className': className} : {})}>
-        <Task  { ...todoData }/>
-        <NewInput inputClass="edit" value={todoData.taskText} />
+    const {id, taskStatus, taskText } = todoTask
+ 
+    if(taskStatus === 'editing' ) {
+      return <li key={id} className='editing'>
+        <input className='edit'
+         defaultValue={taskText}
+        //  onChange={editTask(id, 'new text')}
+         ></input>
       </li>
     }
 
-    return <li key={id} {...(className ? {'className': className} : {})}>
-      <Task  { ...todoData }/>
+    return <li key={id} {...(taskStatus === 'completed' ? {'className': 'completed'} : {})}>
+      <Task  { ...todoTask  }
+      onComplete = {completeTask}
+      onEdit = {editTask}
+      onDelete = {deleteTask}/>
+      {/* onDeleted = {() => {console.log('onDeleted')}}/> */}
     </li>
   })
 
