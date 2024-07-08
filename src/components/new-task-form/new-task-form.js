@@ -1,8 +1,32 @@
+import { Component } from 'react'
 import './new-task-form.css'
 // import NewInput from '../../shared/components/input'
 
-export function NewTaskForm() {
-    return <input className='new-todo' placeholder="What needs to be done?" autoFocus></input>
-    // <NewInput inputClass="new-todo" placeholder="What needs to be done?" autoFocus='true'/>
+export class NewTaskForm extends Component {
+
+    state = {
+        newTaskText: ''
+    }
+
+    inputTextChange = (evt) => {
+        this.setState({newTaskText: evt.target.value})
+    }
+
+    onFormSubmit = evt => {
+        evt.preventDefault()
+        this.props.newTask(this.state.newTaskText)
+        this.setState({newTaskText: ''})
+    }
+
+    render() {
+        return <form onSubmit={this.onFormSubmit}>
+                <input 
+                    className='new-todo'
+                    placeholder="What needs to be done?" 
+                    onChange={this.inputTextChange}
+                    value={this.state.newTaskText}
+                    autoFocus></input>
+                </form>
+        }
 }
 

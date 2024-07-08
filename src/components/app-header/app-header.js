@@ -2,17 +2,13 @@ import './app-header.css'
 import NewTaskForm from '../new-task-form'
 
 
-export function AppHeader() {
+export function AppHeader(props) {
     return (
         <header className="header">
             <h1>todos</h1>
-            <NewTaskForm/>
+            <NewTaskForm newTask = {text => {props.newTask(text)}}/>
         </header>
     )
 }
 
 
-{/* <header class="header">
-<h1>todos</h1>
-// <input class="new-todo" placeholder="What needs to be done?" autofocus>
-</header> */}
