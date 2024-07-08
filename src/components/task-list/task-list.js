@@ -1,34 +1,29 @@
 import Task from '../task'
 import './task-list.css'
-// import NewInput from '../../shared/components/input'
 
 
-// const todoData = [
-//   {taskText: 'Completed task', className: 'completed', createdDate: (Date.now().getSeconds() - 17), id: 1},
-//   {taskText: 'Editing task', className: 'editing', createdDate: (Date.now().getMinutes() - 5), id: 2},
-//   {taskText: 'Active task', createdDate: (Date.now().getMinutes() - 5), id: 3},
-// ]
+export function TaskList(props) {
+  const { todos, changeTaskStatus, editTask, deleteTask } = props
 
-
-export function TaskList({todos, completeTask, editTask, deleteTask}) {
   const todoTasks = todos.map(todoTask => {
     const {id, taskStatus, taskText } = todoTask
- 
+  
     if(taskStatus === 'editing' ) {
       return <li key={id} className='editing'>
-        <input className='edit'
-         defaultValue={taskText}
-        //  onChange={editTask(id, 'new text')}
-         ></input>
+        <form onSubmit={ editTask }>
+          <input name='editingTaskInput' className='edit'
+          defaultValue={taskText}
+          data-id={id}
+          ></input>
+        </form>
       </li>
     }
 
     return <li key={id} {...(taskStatus === 'completed' ? {'className': 'completed'} : {})}>
       <Task  { ...todoTask  }
-      onComplete = {completeTask}
-      onEdit = {editTask}
-      onDelete = {deleteTask}/>
-      {/* onDeleted = {() => {console.log('onDeleted')}}/> */}
+      onChangeStatus = {(id, newStatus) => (changeTaskStatus(id, newStatus))}
+      onDelete = {id => (deleteTask(id))}/>
+
     </li>
   })
 
