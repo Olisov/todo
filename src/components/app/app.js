@@ -16,12 +16,13 @@ export class App extends Component {
         {taskText: 'Editing task', taskStatus: 'editing', createdDate: new Date(), id: 2},
         // {taskText: 'Active task', taskStatus: 'active', createdDate: new Date(), id: 3},
         this.createTaskItem('Active task'),
-      ]
+      ],
+      filterStatus: 'all',  /// all, completed, active
     } 
 
     createTaskItem(text) {
         return {taskText: text, taskStatus: 'active', createdDate: new Date(), id: this.maxId++}
-      }
+    }
     
     addItem = text => {
         this.setState(lastState => {
@@ -73,7 +74,6 @@ export class App extends Component {
         })
     }
 
-    
     deleteItem = id => {
         this.setState(lastState => {
             const { todoData } = lastState;
@@ -86,15 +86,37 @@ export class App extends Component {
         })
     }
     
+    filteredTodos = () => {
+        const { filterStatus, todoData } = this.state
+
+        if (filterStatus !== 'all') return todoData.filter(todo => todo.taskStatus === filterStatus )
+        else return todoData
+    }
+
+    changeFilterStatus = newStatus => {
+        this.setState({filterStatus: newStatus})
+    }
+
+    clearAllCompleted = () => {
+        this.setState(lastState => {
+            return {todoData: lastState.todoData.filter(todo => todo.taskStatus !== 'completed' )}
+        })
+    }
+
     render() {
         return (
             <section className="todoapp">
                 <AppHeader newTask = {this.addItem} />
                 <AppMain 
-                    todoDataArr={this.state.todoData} 
+                    // todoDataArr={this.state.todoData} 
+                    todoDataArr={this.filteredTodos()} 
+                    activeTodoCount = {this.state.todoData.filter(todo => todo.taskStatus !== 'completed' ).length}
                     changeTaskStatus = {this.changeItemStatus}
                     editTask = {this.editItem}
                     deleteTask = {this.deleteItem}
+                    filterStatus = {this.state.filterStatus}
+                    changeFilterStatus = {this.changeFilterStatus}
+                    clearAllCompleted = { this.clearAllCompleted }
                 />
             </section>
         )

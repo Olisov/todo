@@ -9,7 +9,14 @@ export class AppMain extends Component {
 
 
   render() {
-    const { todoDataArr, changeTaskStatus, editTask, deleteTask } = this.props
+    const { todoDataArr, 
+            changeTaskStatus, 
+            editTask,
+            deleteTask,
+            activeTodoCount,
+            filterStatus,
+            changeFilterStatus,
+            clearAllCompleted } = this.props
 
     return (
       <section className="main">
@@ -18,8 +25,12 @@ export class AppMain extends Component {
           changeTaskStatus = {(id, newStatus) => (changeTaskStatus(id, newStatus))}
           editTask = {id => (editTask(id))}
           deleteTask = {id => (deleteTask(id))}/>
-        <AppFooter activeTasksNum = {todoDataArr.filter(todoTask => todoTask.taskStatus !== 'completed').length}/>
-        {/* <AppFooter activeTasksNum = {2}/> */}
+        <AppFooter 
+          activeTodoCount = {activeTodoCount}
+          filterStatus = { filterStatus }
+          changeFilterStatus = { newStatus => {changeFilterStatus(newStatus)}}
+          clearAllCompleted = { () => {clearAllCompleted()}}
+          />
       </section>
     )
   }
