@@ -1,7 +1,8 @@
 import './task-filter.css'
 
 export function TaskFilter(props) {
-  const { filterStatus, changeFilterStatus } = props
+  const { filterStatus, 
+          changeFilterStatus = () => {} } = props
 
   return <ul className="filters">
     <li>
@@ -23,4 +24,9 @@ export function TaskFilter(props) {
         >Completed</button>
     </li>
   </ul>
+}
+
+
+TaskFilter.defaultProps = {
+  filterStatus: 'all',
 }

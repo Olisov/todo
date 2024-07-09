@@ -12,10 +12,10 @@ export class App extends Component {
 
     state = {
       todoData: [
-        {taskText: 'Completed task', taskStatus: 'completed', createdDate: new Date(), id: 1},
-        {taskText: 'Editing task', taskStatus: 'editing', createdDate: new Date(), id: 2},
+        // {taskText: 'Completed task', taskStatus: 'completed', createdDate: new Date(), id: 1},
+        // {taskText: 'Editing task', taskStatus: 'editing', createdDate: new Date(), id: 2},
         // {taskText: 'Active task', taskStatus: 'active', createdDate: new Date(), id: 3},
-        this.createTaskItem('Active task'),
+        // this.createTaskItem('Active task'),
       ],
       filterStatus: 'all',  /// all, completed, active
     } 
@@ -108,9 +108,8 @@ export class App extends Component {
             <section className="todoapp">
                 <AppHeader newTask = {this.addItem} />
                 <AppMain 
-                    // todoDataArr={this.state.todoData} 
                     todoDataArr={this.filteredTodos()} 
-                    activeTodoCount = {this.state.todoData.filter(todo => todo.taskStatus !== 'completed' ).length}
+                    activeTaskCount = {this.state.todoData.filter(todo => todo.taskStatus !== 'completed' ).length}
                     changeTaskStatus = {this.changeItemStatus}
                     editTask = {this.editItem}
                     deleteTask = {this.deleteItem}
