@@ -1,32 +1,48 @@
 import { React, Component } from 'react'
+import PropTypes from 'prop-types'
 import './new-task-form.css'
 // import NewInput from '../../shared/components/input'
 
 export default class NewTaskForm extends Component {
+  constructor(props) {
+    super(props)
 
-    state = {
-        newTaskText: ''
+    this.state = {
+      newTaskText: '',
     }
+  }
 
-    inputTextChange = (evt) => {
-        this.setState({newTaskText: evt.target.value})
-    }
+  inputTextChange = (evt) => {
+    this.setState({ newTaskText: evt.target.value })
+  }
 
-    onFormSubmit = evt => {
-        evt.preventDefault()
-        this.props.newTask(this.state.newTaskText)
-        this.setState({newTaskText: ''})
-    }
+  onFormSubmit = (evt) => {
+    evt.preventDefault()
+    const { newTask } = this.props
+    const { newTaskText } = this.state
 
-    render() {
-        return <form onSubmit={this.onFormSubmit}>
-                <input 
-                    className='new-todo'
-                    placeholder="What needs to be done?" 
-                    onChange={this.inputTextChange}
-                    value={this.state.newTaskText}
-                    autoFocus></input>
-                </form>
-        }
+    newTask(newTaskText)
+    this.setState({ newTaskText: '' })
+  }
+
+  render() {
+    const { newTaskText } = this.state
+
+    return (
+      <form onSubmit={this.onFormSubmit}>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          onChange={this.inputTextChange}
+          value={newTaskText}
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
+        />
+      </form>
+    )
+  }
 }
 
+NewTaskForm.propTypes = {
+  newTask: PropTypes.func,
+}
