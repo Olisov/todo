@@ -1,8 +1,9 @@
+import { React } from 'react'
 import Task from '../task'
 import './task-list.css'
 
 
-export function TaskList(props) {
+function TaskList(props) {
   const { todos, changeTaskStatus, editTask, deleteTask } = props
 
   const todoTasks = todos.map(todoTask => {
@@ -33,3 +34,5 @@ export function TaskList(props) {
     </ul>
     )
 }
+
+export default TaskList

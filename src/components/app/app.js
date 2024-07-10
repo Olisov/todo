@@ -1,12 +1,11 @@
-import { Component } from 'react';
+import { React, Component } from 'react';
 import AppHeader from '../app-header'
 import AppMain from '../app-main'
 import './app.css'
 
 
 
-
-export class App extends Component {
+export default class App extends Component {
 
     maxId = 100;
 

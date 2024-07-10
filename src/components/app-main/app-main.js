@@ -1,29 +1,27 @@
-import { Component } from 'react'
-import PropTypes from 'prop-types'
+import { React, Component } from 'react'
+// import PropTypes from 'prop-types'
 
 import TaskList from '../task-list'
 import AppFooter from '../app-footer'
 import './app-main.css'
 
-export class AppMain extends Component {
+export default class AppMain extends Component {
 
-  static defaultProps = {
-    filterStatus: 'active',
-    activeTaskCount: 0,
-  }
+  // static defaultProps = {
+  //   filterStatus: 'active',
+  //   activeTaskCount: 0,
+  // }
 
-  static propTypes = {
-    activeTaskCount: (props, propName, componentName ) => {
-      const verifyingValue = props[propName]
+  // static propTypes = {
+  //   activeTaskCount: (props, propName, componentName ) => {
+  //     const verifyingValue = props[propName]
 
-      if( typeof verifyingValue === 'number' && !isNaN(verifyingValue) ) return null
-      else return new TypeError(`${componentName}: ${propName} must be a number`)
-    },
-    todoDataArr: PropTypes.arrayOf(PropTypes.object)
-    // todoDataArr: PropTypes.arrayOf(PropTypes.number)
-  }
+  //     if( typeof verifyingValue === 'number' && !isNaN(verifyingValue) ) return null
+  //     else return new TypeError(`${componentName}: ${propName} must be a number`)
+  //   },
+  //   todoDataArr: PropTypes.arrayOf(PropTypes.object)
+  // }
   
-
   render() {
     const { todoDataArr, 
             changeTaskStatus, 

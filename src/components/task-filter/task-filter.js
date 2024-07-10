@@ -1,6 +1,7 @@
+import { React } from 'react'
 import './task-filter.css'
 
-export function TaskFilter(props) {
+function TaskFilter(props) {
   const { filterStatus, 
           changeFilterStatus = () => {} } = props
 
@@ -26,7 +27,8 @@ export function TaskFilter(props) {
   </ul>
 }
 
+export default TaskFilter
 
-TaskFilter.defaultProps = {
-  filterStatus: 'all',
-}
+// TaskFilter.defaultProps = {
+//   filterStatus: 'all',
+// }

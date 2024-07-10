@@ -1,1 +1,2 @@
-export { AppMain as default } from './app-main'
+import AppMain from './app-main'
+export default AppMain

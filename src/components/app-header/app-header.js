@@ -1,8 +1,9 @@
+import { React } from 'react'
 import './app-header.css'
 import NewTaskForm from '../new-task-form'
 
 
-export function AppHeader(props) {
+function AppHeader(props) {
     return (
         <header className="header">
             <h1>todos</h1>
@@ -11,4 +12,4 @@ export function AppHeader(props) {
     )
 }
 
-
+export default AppHeader

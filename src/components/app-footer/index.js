@@ -1,1 +1,2 @@
-export { AppFooter as default } from './app-footer'
+import AppFooter from './app-footer'
+export default AppFooter

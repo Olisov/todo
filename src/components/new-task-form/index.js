@@ -1,1 +1,2 @@
-export { NewTaskForm as default } from './new-task-form'
+import NewTaskForm from './new-task-form'
+export default NewTaskForm

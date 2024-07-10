@@ -1,8 +1,8 @@
-import { Component } from 'react'
+import { React, Component } from 'react'
 import './new-task-form.css'
 // import NewInput from '../../shared/components/input'
 
-export class NewTaskForm extends Component {
+export default class NewTaskForm extends Component {
 
     state = {
         newTaskText: ''

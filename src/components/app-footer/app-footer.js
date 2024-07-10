@@ -1,10 +1,10 @@
+import { React } from 'react'
+import PropTypes from 'prop-types'
 import TaskFilter from '../task-filter'
 import './app-footer.css'
 
-import PropTypes from 'prop-types'
 
-
-export function AppFooter(props) {
+function AppFooter(props) {
   const { activeTaskCount, 
           filterStatus, 
           changeFilterStatus,
@@ -25,5 +25,10 @@ export function AppFooter(props) {
 }
 
 AppFooter.propTypes = {
-  activeTaskCount: PropTypes.number
+  activeTaskCount: PropTypes.number,
+  filterStatus: PropTypes.string,
+  changeFilterStatus: PropTypes.func,
+  clearAllCompleted: PropTypes.func
 }
+
+export default AppFooter

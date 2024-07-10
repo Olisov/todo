@@ -1,1 +1,2 @@
-export { TaskFilter as default } from './task-filter'
+import TaskFilter from './task-filter'
+export default TaskFilter
