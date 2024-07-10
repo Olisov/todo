@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "prettier": "prettier ./src --write",
+    "format ": "prettier ./src --write",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix --color",
     "prepare": "husky init"
