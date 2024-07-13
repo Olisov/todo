@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { React } from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
@@ -18,8 +16,9 @@ function Task(props) {
         type="checkbox"
         checked={taskStatus === 'completed'}
         onChange={() => onChangeStatus(id)}
+        id={`task-${id}`}
       />
-      <label onClick={() => onChangeStatus(id)}>
+      <label htmlFor={`task-${id}`}>
         <span className="description">{taskText}</span>
         <span className="created">{formatDistanceToNow(createdDate, { addSuffix: true, includeSeconds: true })}</span>
       </label>

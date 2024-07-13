@@ -1,7 +1,8 @@
 import { React, Component } from 'react'
 
+import TaskList from '../task-list'
+import AppFooter from '../app-footer'
 import AppHeader from '../app-header'
-import AppMain from '../app-main'
 import './app.css'
 
 export default class App extends Component {
@@ -90,12 +91,12 @@ export default class App extends Component {
   }
 
   createTaskItem(text) {
+    this.maxId += 1
     return {
       taskText: text,
       taskStatus: 'active',
       createdDate: new Date(),
-      // eslint-disable-next-line no-plusplus
-      id: this.maxId++,
+      id: this.maxId,
     }
   }
 
@@ -105,16 +106,21 @@ export default class App extends Component {
     return (
       <section className="todoapp">
         <AppHeader newTask={this.addItem} />
-        <AppMain
-          todoDataArr={this.filteredTodos()}
-          activeTaskCount={todoData.filter((todo) => todo.taskStatus !== 'completed').length}
-          changeTaskStatus={this.changeItemStatus}
-          editTask={this.editItem}
-          deleteTask={this.deleteItem}
-          filterStatus={filterStatus}
-          changeFilterStatus={this.changeFilterStatus}
-          clearAllCompleted={this.clearAllCompleted}
-        />
+
+        <section className="main">
+          <TaskList
+            todos={this.filteredTodos()}
+            changeTaskStatus={this.changeItemStatus}
+            editTask={this.editItem}
+            deleteTask={this.deleteItem}
+          />
+          <AppFooter
+            activeTaskCount={todoData.filter((todo) => todo.taskStatus !== 'completed').length}
+            filterStatus={filterStatus}
+            changeFilterStatus={this.changeFilterStatus}
+            clearAllCompleted={this.clearAllCompleted}
+          />
+        </section>
       </section>
     )
   }

@@ -14,7 +14,14 @@ function TaskList(props) {
       return (
         <li key={id} className="editing">
           <form onSubmit={editTask}>
-            <input name="editingTaskInput" className="edit" defaultValue={taskText} data-id={id} />
+            <input
+              name="editingTaskInput"
+              className="edit"
+              defaultValue={taskText}
+              data-id={id}
+              pattern="\w+"
+              required
+            />
           </form>
         </li>
       )

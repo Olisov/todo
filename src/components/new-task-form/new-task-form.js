@@ -35,8 +35,9 @@ export default class NewTaskForm extends Component {
           placeholder="What needs to be done?"
           onChange={this.inputTextChange}
           value={newTaskText}
-          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
+          pattern="\w+"
+          required
         />
       </form>
     )
