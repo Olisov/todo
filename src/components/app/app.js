@@ -19,16 +19,16 @@ export default class App extends Component {
         // this.createTaskItem('Active task'),
       ],
       filterStatus: 'all', /// all, completed, active
-      timerWorksId: [],
       intervalId: null,
     }
   }
 
   componentDidUpdate() {
-    const { timerWorksId, intervalId } = this.state
+    const { todoData, intervalId } = this.state
+    const timerOn = todoData.filter((data) => data.timeRunning === true).length > 0
 
-    if (!intervalId && timerWorksId.length > 0) this.startTimers()
-    else if (intervalId && timerWorksId.length === 0) this.stopTimers()
+    if (!intervalId && timerOn) this.startTimers()
+    else if (intervalId && !timerOn) this.stopTimers()
   }
 
   componentWillUnmount() {
@@ -131,7 +131,7 @@ export default class App extends Component {
 
   timerPlay = (id) => {
     this.setState((lastState) => {
-      const { todoData, timerWorksId } = lastState
+      const { todoData } = lastState
       const idx = todoData.findIndex((el) => el.id === id)
 
       const editedTask = { ...todoData[idx] }
@@ -141,23 +141,20 @@ export default class App extends Component {
 
       return {
         todoData: [...todoData.slice(0, idx), editedTask, ...todoData.slice(idx + 1)],
-        timerWorksId: [...timerWorksId, id],
       }
     })
   }
 
   timerPause = (id) => {
     this.setState((lastState) => {
-      const { todoData, timerWorksId } = lastState
+      const { todoData } = lastState
       const idx = todoData.findIndex((el) => el.id === id)
-      const timerIdx = timerWorksId.findIndex((el) => el === id)
 
       const editedTask = { ...todoData[idx] }
       editedTask.timeRunning = false
 
       return {
         todoData: [...todoData.slice(0, idx), editedTask, ...todoData.slice(idx + 1)],
-        timerWorksId: [...timerWorksId.slice(0, timerIdx), ...timerWorksId.slice(timerIdx + 1)],
       }
     })
   }
