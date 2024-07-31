@@ -5,7 +5,7 @@ import Task from '../task'
 import './task-list.css'
 
 function TaskList(props) {
-  const { todos, changeTaskStatus, editTask, deleteTask } = props
+  const { todos, changeTaskStatus, editTask, deleteTask, timerPlay, timerPause } = props
 
   const todoTasks = todos.map((todoTask) => {
     const { id, taskStatus, taskText } = todoTask
@@ -21,6 +21,9 @@ function TaskList(props) {
               data-id={id}
               pattern="\w+"
               required
+              onKeyUp={(evt) => {
+                if (evt.key === 'Escape') changeTaskStatus(id, 'Active')
+              }}
             />
           </form>
         </li>
@@ -33,6 +36,8 @@ function TaskList(props) {
           {...todoTask}
           onChangeStatus={(taskId, newStatus) => changeTaskStatus(taskId, newStatus)}
           onDelete={(taskId) => deleteTask(taskId)}
+          timerPlay={(taskId) => timerPlay(taskId)}
+          timerPause={(taskId) => timerPause(taskId)}
         />
       </li>
     )
@@ -46,6 +51,8 @@ TaskList.propTypes = {
   changeTaskStatus: PropTypes.func,
   editTask: PropTypes.func,
   deleteTask: PropTypes.func,
+  timerPlay: PropTypes.func,
+  timerPause: PropTypes.func,
 }
 
 export default TaskList

@@ -10,8 +10,8 @@ function AppHeader(props) {
     <header className="header">
       <h1>todos</h1>
       <NewTaskForm
-        newTask={(text) => {
-          newTask(text)
+        newTask={(data) => {
+          newTask(data)
         }}
       />
     </header>
