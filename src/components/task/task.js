@@ -7,7 +7,25 @@ import './task.css'
 //= > 'in 6 months'
 
 function Task(props) {
-  const { taskText, createdDate, taskStatus, id, onChangeStatus, onDelete } = props
+  const {
+    taskText,
+    timerMin,
+    timerSec,
+    timeRunning,
+    createdDate,
+    taskStatus,
+    id,
+    onChangeStatus,
+    onDelete,
+    timerPlay,
+    timerPause,
+  } = props
+
+  const timerControlBtn = timeRunning ? (
+    <button aria-label="Pause button" type="button" className="icon icon-pause" onClick={() => timerPause(id)} />
+  ) : (
+    <button aria-label="Play button" type="button" className="icon icon-play" onClick={() => timerPlay(id)} />
+  )
 
   return (
     <div className="view">
@@ -19,8 +37,14 @@ function Task(props) {
         id={`task-${id}`}
       />
       <label htmlFor={`task-${id}`}>
-        <span className="description">{taskText}</span>
-        <span className="created">{formatDistanceToNow(createdDate, { addSuffix: true, includeSeconds: true })}</span>
+        <span className="title">{taskText}</span>
+        <span className="description">
+          {timerControlBtn}
+          {timerMin}:{timerSec}
+        </span>
+        <span className="description">
+          {formatDistanceToNow(createdDate, { addSuffix: true, includeSeconds: true })}
+        </span>
       </label>
       <button
         type="button"
@@ -39,6 +63,8 @@ Task.propTypes = {
   id: PropTypes.number,
   onChangeStatus: PropTypes.func,
   onDelete: PropTypes.func,
+  timerPlay: PropTypes.func,
+  timerPause: PropTypes.func,
   createdDate: (props, propName, componentName) => {
     if (props[propName] instanceof Date) return null
     return new TypeError(`${componentName}: ${propName} must be a Date`)
