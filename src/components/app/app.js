@@ -1,220 +1,143 @@
-import { React, Component } from 'react'
+import { React, useState, useEffect } from 'react'
 
 import TaskList from '../task-list'
 import AppFooter from '../app-footer'
 import AppHeader from '../app-header'
 import './app.css'
 
-export default class App extends Component {
-  maxId = 100
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      todoData: [
-        // {taskText: 'Completed task', taskStatus: 'completed', createdDate: new Date(), id: 1},
-        // {taskText: 'Editing task', taskStatus: 'editing', createdDate: new Date(), id: 2},
-        // {taskText: 'Active task', taskStatus: 'active', createdDate: new Date(), id: 3},
-        // this.createTaskItem('Active task'),
-      ],
-      filterStatus: 'all', /// all, completed, active
-      intervalId: null,
-    }
-  }
-
-  componentDidUpdate() {
-    const { todoData, intervalId } = this.state
-    const timerOn = todoData.filter((data) => data.timeRunning === true).length > 0
-
-    if (!intervalId && timerOn) this.startTimers()
-    else if (intervalId && !timerOn) this.stopTimers()
-  }
-
-  componentWillUnmount() {
-    this.stopTimers()
-  }
-
-  addItem = (data) => {
-    this.setState((lastState) => ({ todoData: [...lastState.todoData, this.createTaskItem(data)] }))
-  }
-
-  changeItemStatus = (id, newStatus) => {
-    if (newStatus) this.timerPause(id)
-    this.setState((lastState) => {
-      const { todoData } = lastState
-      const idx = todoData.findIndex((el) => el.id === id)
-
-      const editedTask = { ...todoData[idx] }
-
-      if (newStatus) editedTask.taskStatus = newStatus
-      else if (todoData[idx].taskStatus !== 'completed') {
-        editedTask.taskStatus = 'completed'
-        editedTask.timerMin = 0
-        editedTask.timerSec = 0
-      } else {
-        editedTask.taskStatus = 'active'
-      }
-      editedTask.timeRunning = false
-
-      return {
-        todoData: [...todoData.slice(0, idx), editedTask, ...todoData.slice(idx + 1)],
-      }
-    })
-  }
-
-  editItem = (evt) => {
-    evt.preventDefault()
-    const dataInput = evt.target.editingTaskInput
-    const id = +dataInput.dataset.id
-
-    this.setState((lastState) => {
-      const { todoData } = lastState
-      const idx = todoData.findIndex((el) => el.id === id)
-
-      const editedTask = {
-        ...todoData[idx],
-        taskStatus: 'active',
-        taskText: dataInput.value,
-      }
-
-      return {
-        todoData: [...todoData.slice(0, idx), editedTask, ...todoData.slice(idx + 1)],
-      }
-    })
-  }
-
-  deleteItem = (id) => {
-    this.timerPause(id)
-    this.setState((lastState) => {
-      const { todoData } = lastState
-      const idx = todoData.findIndex((el) => el.id === id)
-
-      return {
-        todoData: [...todoData.slice(0, idx), ...todoData.slice(idx + 1)],
-      }
-    })
-  }
-
-  filteredTodos = () => {
-    const { filterStatus, todoData } = this.state
-
-    if (filterStatus !== 'all') return todoData.filter((todo) => todo.taskStatus === filterStatus)
-    return todoData
-  }
-
-  changeFilterStatus = (newStatus) => {
-    this.setState({ filterStatus: newStatus })
-  }
-
-  clearAllCompleted = () => {
-    this.setState((lastState) => ({ todoData: lastState.todoData.filter((todo) => todo.taskStatus !== 'completed') }))
-  }
-
-  startTimers = () => {
-    this.setState({
-      intervalId: setInterval(() => {
-        const { todoData } = this.state
-
-        todoData.forEach((todo) => {
-          if (todo.timeRunning) this.updateTaskTimer(todo.id)
-        })
-      }, 1000),
-    })
-  }
-
-  stopTimers = () => {
-    const { intervalId } = this.state
-    clearInterval(intervalId)
-    this.setState({ intervalId: null })
-  }
-
-  timerPlay = (id) => {
-    this.setState((lastState) => {
-      const { todoData } = lastState
-      const idx = todoData.findIndex((el) => el.id === id)
-
-      const editedTask = { ...todoData[idx] }
-
-      if (+editedTask.timerMin + +editedTask.timerSec > 0) editedTask.timeRunning = true
-      else editedTask.timeRunning = false
-
-      return {
-        todoData: [...todoData.slice(0, idx), editedTask, ...todoData.slice(idx + 1)],
-      }
-    })
-  }
-
-  timerPause = (id) => {
-    this.setState((lastState) => {
-      const { todoData } = lastState
-      const idx = todoData.findIndex((el) => el.id === id)
-
-      const editedTask = { ...todoData[idx] }
-      editedTask.timeRunning = false
-
-      return {
-        todoData: [...todoData.slice(0, idx), editedTask, ...todoData.slice(idx + 1)],
-      }
-    })
-  }
-
-  updateTaskTimer = (id, stepSec = 1) => {
-    this.setState((lastState) => {
-      const { todoData } = lastState
-      const idx = todoData.findIndex((el) => el.id === id)
-
-      const editedTask = structuredClone(todoData[idx])
-      if (editedTask.timerSec >= stepSec) editedTask.timerSec -= stepSec
-      else if (editedTask.timerMin > 0) {
-        editedTask.timerMin -= 1
-        editedTask.timerSec += 60 - stepSec
-      }
-
-      return {
-        todoData: [...todoData.slice(0, idx), editedTask, ...todoData.slice(idx + 1)],
-      }
-    })
-  }
-
-  createTaskItem(data) {
-    const { taskText, timerMin, timerSec } = data
-    this.maxId += 1
-    return {
-      taskText,
-      timerMin,
-      timerSec,
-      timeRunning: false,
-      taskStatus: 'active',
-      createdDate: new Date(),
-      id: this.maxId,
-    }
-  }
-
-  render() {
-    const { todoData, filterStatus } = this.state
-
-    return (
-      <section className="todoapp">
-        <AppHeader newTask={this.addItem} />
-
-        <section className="main">
-          <TaskList
-            todos={this.filteredTodos()}
-            changeTaskStatus={this.changeItemStatus}
-            editTask={this.editItem}
-            deleteTask={this.deleteItem}
-            timerPlay={this.timerPlay}
-            timerPause={this.timerPause}
-          />
-          <AppFooter
-            activeTaskCount={todoData.filter((todo) => todo.taskStatus !== 'completed').length}
-            filterStatus={filterStatus}
-            changeFilterStatus={this.changeFilterStatus}
-            clearAllCompleted={this.clearAllCompleted}
-          />
-        </section>
-      </section>
-    )
+function createTaskItem(data, maxId) {
+  const { taskText, timerMin, timerSec } = data
+  return {
+    taskText,
+    timerMin,
+    timerSec,
+    timeRunning: false,
+    taskStatus: 'active',
+    createdDate: new Date().toString(),
+    id: maxId,
   }
 }
+
+function App() {
+  const [appState, setAppState] = useState({
+    maxId: 100,
+    filterStatus: 'all', /// all, completed, active
+    intervalId: null,
+  })
+  const { maxId, filterStatus, intervalId } = appState
+
+  const [todoDataArr, setTodoDataArr] = useState([
+    // {taskText: 'Completed task', taskStatus: 'completed', createdDate: 'Mon Aug 05 2024 12:05:05 GMT+0300', id: 1},
+    // {taskText: 'Editing task', taskStatus: 'editing', createdDate: 'Mon Aug 05 2024 12:05:05 GMT+0300', id: 2},
+    // {taskText: 'Active task', taskStatus: 'active', createdDate: 'Mon Aug 05 2024 12:05:05 GMT+0300', id: 3},
+  ])
+
+  const updateTaskTimer = (id, stepSec = 1) => {
+    setTodoDataArr((lastTodoDataArr) => {
+      const idx = lastTodoDataArr.findIndex((el) => el.id === id)
+      const updatedTask = { ...lastTodoDataArr[idx] }
+
+      if (updatedTask.timerSec >= stepSec) updatedTask.timerSec -= stepSec
+      else if (updatedTask.timerMin > 0) {
+        updatedTask.timerMin -= 1
+        updatedTask.timerSec += 60 - stepSec
+      } else {
+        updatedTask.timerMin = 0
+        updatedTask.timerSec = 0
+        updatedTask.timeRunning = false
+      }
+
+      return [...lastTodoDataArr.slice(0, idx), updatedTask, ...lastTodoDataArr.slice(idx + 1)]
+    })
+  }
+
+  function startTimers() {
+    setAppState((lastAppState) => {
+      return {
+        ...lastAppState,
+        intervalId: setInterval(() => {
+          todoDataArr.forEach((todo) => {
+            if (todo.timeRunning) updateTaskTimer(todo.id)
+          })
+        }, 1000),
+      }
+    })
+  }
+
+  function stopTimers() {
+    setAppState((lastAppState) => {
+      clearInterval(lastAppState.intervalId)
+      return { ...lastAppState, intervalId: null }
+    })
+  }
+
+  useEffect(() => {
+    const timerOn = todoDataArr.filter((data) => data.timeRunning === true).length > 0
+
+    if (!intervalId && timerOn) startTimers()
+    else if (intervalId && !timerOn) stopTimers()
+    return () => {
+      if (intervalId) stopTimers()
+    }
+  }, [todoDataArr, appState])
+
+  const addTask = (newTodoData) => {
+    setTodoDataArr((lastTodoDataArr) => {
+      return [...lastTodoDataArr, createTaskItem(newTodoData, maxId)]
+    })
+    setAppState((lastState) => {
+      return { ...lastState, maxId: lastState.maxId + 1 }
+    })
+  }
+
+  const updateTask = (id, newParams) => {
+    setTodoDataArr((lastTodoDataArr) => {
+      const idx = lastTodoDataArr.findIndex((el) => el.id === id)
+      const updatedTask = { ...lastTodoDataArr[idx], ...newParams }
+
+      return [...lastTodoDataArr.slice(0, idx), updatedTask, ...lastTodoDataArr.slice(idx + 1)]
+    })
+  }
+
+  const deleteTask = (id) => {
+    setTodoDataArr((lastTodoDataArr) => {
+      const idx = lastTodoDataArr.findIndex((el) => el.id === id)
+      return [...lastTodoDataArr.slice(0, idx), ...lastTodoDataArr.slice(idx + 1)]
+    })
+  }
+
+  const filteredTodos = () => {
+    if (filterStatus !== 'all') return todoDataArr.filter((todo) => todo.taskStatus === filterStatus)
+    return todoDataArr
+  }
+
+  const changeFilterStatus = (newStatus) => {
+    setAppState((lastAppState) => {
+      return { ...lastAppState, filterStatus: newStatus }
+    })
+  }
+
+  const clearAllCompleted = () => {
+    setTodoDataArr((lastTodoDataArr) => {
+      return lastTodoDataArr.filter((todo) => todo.taskStatus !== 'completed')
+    })
+  }
+
+  return (
+    <section className="todoapp">
+      <AppHeader newTask={addTask} />
+
+      <section className="main">
+        <TaskList todos={filteredTodos()} updateTask={updateTask} deleteTask={deleteTask} />
+        <AppFooter
+          activeTaskCount={todoDataArr.filter((todo) => todo.taskStatus !== 'completed').length}
+          filterStatus={filterStatus}
+          changeFilterStatus={changeFilterStatus}
+          clearAllCompleted={clearAllCompleted}
+        />
+      </section>
+    </section>
+  )
+}
+
+export default App

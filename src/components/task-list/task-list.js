@@ -5,24 +5,32 @@ import Task from '../task'
 import './task-list.css'
 
 function TaskList(props) {
-  const { todos, changeTaskStatus, editTask, deleteTask, timerPlay, timerPause } = props
+  const { todos, updateTask, deleteTask } = props
 
   const todoTasks = todos.map((todoTask) => {
     const { id, taskStatus, taskText } = todoTask
 
+    const enableTaskChange = (evt) => {
+      evt.preventDefault()
+      const newParams = {
+        taskStatus: 'active',
+        taskText: evt.target.editingTaskInput.value,
+      }
+      updateTask(id, newParams)
+    }
+
     if (taskStatus === 'editing') {
       return (
         <li key={id} className="editing">
-          <form onSubmit={editTask}>
+          <form onSubmit={enableTaskChange}>
             <input
               name="editingTaskInput"
               className="edit"
               defaultValue={taskText}
-              data-id={id}
               pattern="\w+"
               required
               onKeyUp={(evt) => {
-                if (evt.key === 'Escape') changeTaskStatus(id, 'Active')
+                if (evt.key === 'Escape') updateTask(id, { taskStatus: 'Active' })
               }}
             />
           </form>
@@ -34,10 +42,8 @@ function TaskList(props) {
       <li key={id} {...(taskStatus === 'completed' ? { className: 'completed' } : {})}>
         <Task
           {...todoTask}
-          onChangeStatus={(taskId, newStatus) => changeTaskStatus(taskId, newStatus)}
           onDelete={(taskId) => deleteTask(taskId)}
-          timerPlay={(taskId) => timerPlay(taskId)}
-          timerPause={(taskId) => timerPause(taskId)}
+          updateTask={(taskId, params) => updateTask(taskId, params)}
         />
       </li>
     )
@@ -48,11 +54,8 @@ function TaskList(props) {
 
 TaskList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
-  changeTaskStatus: PropTypes.func,
-  editTask: PropTypes.func,
   deleteTask: PropTypes.func,
-  timerPlay: PropTypes.func,
-  timerPause: PropTypes.func,
+  updateTask: PropTypes.func,
 }
 
 export default TaskList

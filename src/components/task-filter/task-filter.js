@@ -50,7 +50,3 @@ TaskFilter.propTypes = {
 }
 
 export default TaskFilter
-
-// TaskFilter.defaultProps = {
-//   filterStatus: 'all',
-// }
