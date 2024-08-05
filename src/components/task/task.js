@@ -3,28 +3,23 @@ import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 import './task.css'
 
-// formatDistanceToNow(new Date(2014, 6, 2), { addSuffix: true, includeSeconds: true })
-//= > 'in 6 months'
-
 function Task(props) {
-  const {
-    taskText,
-    timerMin,
-    timerSec,
-    timeRunning,
-    createdDate,
-    taskStatus,
-    id,
-    onChangeStatus,
-    onDelete,
-    timerPlay,
-    timerPause,
-  } = props
+  const { taskText, timerMin, timerSec, timeRunning, createdDate, taskStatus, id, onDelete, updateTask } = props
 
   const timerControlBtn = timeRunning ? (
-    <button aria-label="Pause button" type="button" className="icon icon-pause" onClick={() => timerPause(id)} />
+    <button
+      aria-label="Pause button"
+      type="button"
+      className="icon icon-pause"
+      onClick={() => updateTask(id, { timeRunning: false })}
+    />
   ) : (
-    <button aria-label="Play button" type="button" className="icon icon-play" onClick={() => timerPlay(id)} />
+    <button
+      aria-label="Play button"
+      type="button"
+      className="icon icon-play"
+      onClick={() => updateTask(id, { timeRunning: true })}
+    />
   )
 
   return (
@@ -33,7 +28,11 @@ function Task(props) {
         className="toggle"
         type="checkbox"
         checked={taskStatus === 'completed'}
-        onChange={() => onChangeStatus(id)}
+        onChange={(evt) => {
+          if (evt.target.checked)
+            updateTask(id, { taskStatus: 'completed', timeRunning: false, timerMin: 0, timerSec: 0 })
+          else updateTask(id, { taskStatus: 'active' })
+        }}
         id={`task-${id}`}
       />
       <label htmlFor={`task-${id}`}>
@@ -43,14 +42,14 @@ function Task(props) {
           {timerMin}:{timerSec}
         </span>
         <span className="description">
-          {formatDistanceToNow(createdDate, { addSuffix: true, includeSeconds: true })}
+          {formatDistanceToNow(new Date(createdDate), { addSuffix: true, includeSeconds: true })}
         </span>
       </label>
       <button
         type="button"
         aria-label="Editing button"
         className="icon icon-edit"
-        onClick={() => onChangeStatus(id, 'editing')}
+        onClick={() => updateTask(id, { taskStatus: 'editing', timeRunning: false })}
       />
       <button type="button" aria-label="Delete button" className="icon icon-destroy" onClick={() => onDelete(id)} />
     </div>
@@ -61,14 +60,9 @@ Task.propTypes = {
   taskText: PropTypes.string,
   taskStatus: PropTypes.string,
   id: PropTypes.number,
-  onChangeStatus: PropTypes.func,
   onDelete: PropTypes.func,
-  timerPlay: PropTypes.func,
-  timerPause: PropTypes.func,
-  createdDate: (props, propName, componentName) => {
-    if (props[propName] instanceof Date) return null
-    return new TypeError(`${componentName}: ${propName} must be a Date`)
-  },
+  updateTask: PropTypes.func,
+  createdDate: PropTypes.string,
 }
 
 export default Task
